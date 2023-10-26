@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IJSE POS</title>
+
+    <link rel="stylesheet" href="assets/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+</head>
+<body>
+
+<!--header-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">IJSE POS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" id="customer-nav">Customers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="item-nav">Items</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--customer section-->
+<section id="customer-section" class="mt-5">
+
+    <div class="container">
+        <div class="row">
+
+            <!--customer form-->
+            <div class="col-6 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                <form>
+
+                    <h2>Customer Management</h2>
+
+                    <div class="form-group mt-3">
+                        <label for="customer_id">Customer Id</label>
+                        <input type="number" class="form-control" id="customer_id" placeholder="Enter customer id">
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="customer_first_name">Customer First Name</label>
+                        <input type="text" class="form-control" id="customer_first_name" placeholder="Enter customer first name">
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="customer_last_name">Customer Last Name</label>
+                        <input type="text" class="form-control" id="customer_last_name" placeholder="Enter customer last name">
+                    </div>
+
+                    <div class="form-group mt-3 mb-5">
+                        <label for="customer_mobile">Customer Mobile</label>
+                        <input type="tel" class="form-control" id="customer_mobile" placeholder="Enter customer mobile number">
+                    </div>
+
+
+                    <div id="customer-btns">
+                        <button type="button" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="reset" class="btn btn-warning">Reset</button>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <!--customer tbl-->
+            <div class="col-6 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+
+                <input type="text" class="form-control mb-3" id="customer-search" placeholder="Search by First Name">
+
+                <table class="table">
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Customer Id</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Mobile Number</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="customer-tbl-body"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!--item section-->
+<section id="item-section" class="mt-5">
+
+    <div class="container">
+        <div class="row">
+
+            <!--customer form-->
+            <div class="col-6 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                <form>
+
+                    <h2>Item Management</h2>
+
+                    <div class="form-group mt-3">
+                        <label for="item_id">Item Id</label>
+                        <input type="number" class="form-control" id="item_id" placeholder="Enter item id">
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="item_name">Item Name</label>
+                        <input type="text" class="form-control" id="item_name" placeholder="Enter item name">
+                    </div>
+
+                    <div class="form-group mt-3 mb-5">
+                        <label for="item_qty">Qty</label>
+                        <input type="number" class="form-control" id="item_qty" placeholder="Enter item qty">
+                    </div>
+
+                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="reset" class="btn btn-warning">Reset</button>
+
+
+                </form>
+            </div>
+
+            <!--customer tbl-->
+            <div class="col-6 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+
+                <table class="table">
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Item Id</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Qty</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="item-tbl-body"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<script src="assets/lib/jquery.min.js"></script>
+<script src="assets/lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="module" src="controller/CustomerController.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    $('#item-section').css('display', 'none');
+
+    $('#customer-nav').on('click', () => {
+        $('#customer-section').css('display', 'block');
+        $('#item-section').css('display', 'none');
+    });
+
+    $('#item-nav').on('click', () => {
+        $('#customer-section').css('display', 'none');
+        $('#item-section').css('display', 'block');
+    });
+
+</script>
+
+</body>
+</html>
