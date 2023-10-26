@@ -54,13 +54,15 @@
                     </div>
 
                     <div class="form-group mt-3">
-                        <label for="customer_first_name">Customer First Name</label>
-                        <input type="text" class="form-control" id="customer_first_name" placeholder="Enter customer first name">
+                        <label for="customer_name">Customer Name</label>
+                        <input type="text" class="form-control" id="customer_name" placeholder="Enter customer name">
                     </div>
 
                     <div class="form-group mt-3">
-                        <label for="customer_last_name">Customer Last Name</label>
-                        <input type="text" class="form-control" id="customer_last_name" placeholder="Enter customer last name">
+                        <label for="customer_address">Customer Address</label>
+<!--                        <input type="text" class="form-control" id="customer_address" placeholder="Enter customer address">-->
+                        <textarea type="text" class="form-control" id="customer_address" placeholder="Enter customer address">
+                        </textarea>
                     </div>
 
                     <div class="form-group mt-3 mb-5">
@@ -91,7 +93,7 @@
                     <tr>
                         <th scope="col">Customer Id</th>
                         <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
+                        <th scope="col">Address</th>
                         <th scope="col">Mobile Number</th>
                     </tr>
                     </thead>
@@ -113,7 +115,7 @@
     <div class="container">
         <div class="row">
 
-            <!--customer form-->
+            <!--Item form-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
                 <form class="tbl_form">
 
@@ -143,7 +145,7 @@
                 </form>
             </div>
 
-            <!--customer tbl-->
+            <!--Item tbl-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6" id="itm_tbl">
 
                 <input type="text" class="form-control mb-3" id="item-search" placeholder="Search by First Name">
