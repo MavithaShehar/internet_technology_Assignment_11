@@ -1,0 +1,191 @@
+
+/*nav*/
+
+.navbar{
+    background: #1c1cd5;!important;
+    position: fixed;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+header{
+    position: relative;
+}
+
+#navbarNav{
+    position: absolute;
+    right: 100px;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+    color:white;
+    font-size: 20px;
+    margin-left: 20px;
+}
+.navbar-nav .nav-item.active .nav-link:hover {
+    color: #00ffff;
+    transform: scale(1.1);
+}
+.navbar-nav .nav-item.active .nav-link:active {
+    color: white;
+    transform: scale(0.7);
+}
+
+#nav_topic{
+    padding-left:100px ;
+    color: #ddf5f5;
+    font-size: 30px;
+    font-style: italic;
+}
+
+#nav_topic img{
+    background: white;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+section{
+    background: rgba(145, 235, 255, 0.07);
+}
+
+label{
+    font-size:16px;
+    font-weight: bold;
+    color: #00409a;
+}
+
+.topic{
+    background: #007c7c;
+    color: white;
+    padding: 10px;
+}
+.tbl_form{
+    padding: 20px;
+    box-shadow: rgb(21, 204, 227) 0px 2px 8px;
+}
+#cus_tbl{
+    padding: 20px;
+    box-shadow: rgb(21, 204, 227) 0px 2px 8px;
+}
+
+.thead-dark>tr>th{
+    background: #69e5ff;
+}
+
+.thead-dark>tr>th{
+    background: #69e5ff;
+}
+#customer-tbl-body td {
+    border-bottom-color: #1c1cd5;
+}
+
+
+/*orders*/
+
+* {
+    position: relative;
+}
+#dashboard, #customer, #item, #order {
+    font-weight: 600;
+    color: #1f1f1f;
+}
+
+#search {
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 40px;
+    width: 50%;
+}
+
+.form-label{
+    font-weight: bold;
+}
+
+#id, #name, #address, #salary, #price, #qty {
+    border: 1px solid black;
+}
+
+.buttons button {
+    width: 28%;
+}
+
+
+#customer_lab{
+    display: block;
+}
+#customer-id{
+    width: 250px;
+    display:inline-block;
+}
+.form-control{
+    width: 250px;
+}
+
+
+#item_lab{
+    display: block;
+}
+#item-id{
+    width: 250px;
+    display:inline-block;
+}
+#item_btn{
+    display: flex;
+    justify-content: center;
+}
+#qty_area{
+    background-color: #e3fc76;
+    height: 130px;
+    padding-left: 10px;
+}
+
+.order_section{
+    background-color: papayawhip;
+    border-radius: 10px;
+    border: 2px solid pink;
+    padding: 10px;
+}
+
+.cash_section{
+    margin-top: 5px;
+    background-color: greenyellow;
+    border-radius: 10px;
+    border: 2px solid pink;
+    padding: 10px;
+}
+
+/*dash bord*/
+
+.card {
+    border: none;
+    display: flex;
+    align-items: center;
+}
+
+.card_body {
+    width: 80%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #2fd4e8;
+    border-radius: 5px;
+    color: white;
+}
+
+.card_body h1 {
+    font-size: 30px;
+    text-align: center;
+}
+.card_body > h2 {
+    font-size: 35px;
+    color: black;
+}
+
+.chart {
+    width: 85%;
+    height: 80%;
+}
+
+
