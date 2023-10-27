@@ -99,6 +99,9 @@ $('#items-btns>button').eq(2).on('click', () => {
 
 // Fill item
 $('#items-tbl-body').on('click', 'tr', function () {
+
+    let index = $(this).index();
+
     let items_id = $(this).find('.items_id').text();
     let items_name = $(this).find('.items_name').text();
     let items_qty = $(this).find('.items_qty').text();

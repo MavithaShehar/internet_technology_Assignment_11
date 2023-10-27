@@ -63,8 +63,7 @@
 
                     <div class="form-group mt-3">
                         <label for="customer_address">Customer Address</label>
-<!--                        <input type="text" class="form-control" id="customer_address" placeholder="Enter customer address">-->
-                        <textarea type="text" class="form-control" id="customer_address" placeholder="Enter customer address">
+                        <input type="text" class="form-control" id="customer_address" placeholder="Enter customer address">
                         </textarea>
                     </div>
 
@@ -216,26 +215,23 @@
                         <h4 class="topic">Customer</h4>
                         <div class="row">
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
-                                <label for="customers">Choose a Customer:</label>
-                                <select class="form-select" aria-label="Default select example" id="customers">
-                                    <option value="C001">C001</option>
-                                    <option value="C002">C002</option>
-                                    <option value="C001">C003</option>
+                                <label for="customer">Customer</label>
+                                <select class="form-select" aria-label="Default select example" id="customer">
                                 </select>
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
-                                <label for="c_name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="c_name"
+                                <label for="order_customer_name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="order_customer_name"
                                        placeholder="">
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
-                                <label for="c_address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="c_address"
+                                <label for="order_customer_address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="order_customer_address"
                                        placeholder="">
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                                <label for="c_salary" class="form-label">salary</label>
-                                <input type="text" class="form-control" id="c_salary"
+                                <label for="order_customer_mobile" class="form-label">salary</label>
+                                <input type="number" class="form-control" id="order_customer_mobile"
                                        placeholder="">
                             </div>
                         </div>
@@ -251,11 +247,8 @@
                     <h4 class="topic">Item</h4>
                     <div class="row">
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="items">Choose a Item:</label>
-                            <select class="form-select" aria-label="Default select example" id="items">
-                                <option value="C001">C001</option>
-                                <option value="C002">C002</option>
-                                <option value="C001">C003</option>
+                            <label for="item">Item</label>
+                            <select class="form-select" aria-label="Default select example" id="item">
                             </select>
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
@@ -382,6 +375,7 @@
 <script type="module" src="controller/customerController.js"></script>
 <script type="module" src="controller/itemController.js"></script>
 <script type="module" src="controller/indexController.js"></script>
+<script type="module" src="controller/orderController.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
