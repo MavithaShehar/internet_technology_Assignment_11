@@ -1,390 +1,343 @@
-import {customer_db, item_db, order_db} from "../db/db.js";
-import {ItemModel} from "../model/ItemModel.js";
-import {OrderModel} from "../model/OrderModel.js";
-import { loadItemData } from "./item_section_controller.js";
-import { loadOrderCards } from "./order_details_controller.js";
+import {OrdersModel} from "../model/ordersModel.js"
+import {customer_db} from "../db/db.js";
+import {items_db} from "../db/db.js";
+import {orders_db} from "../db/db.js"
 
-var row_index = null;
 
-$('#cmbCustomers').on('click', () => {
-    customer_db.forEach(customer => {
-        // Check if an option with the same customer_id already exists
-        const isCustomerAdded = Array.from(document.getElementById('cmbCustomers').options).some(option => {
-            const existingCustomer = JSON.parse(option.value);
-            return existingCustomer.customer_id === customer.customer_id;
-        });
-
-        if (!isCustomerAdded) {
-            // If the customer with the same customer_id doesn't exist, add a new option
-            const option = document.createElement("option");
-            option.value = JSON.stringify(customer);
-            option.text = customer.customer_id;
-            document.getElementById('cmbCustomers').appendChild(option);
-        }
-    });
-});
-$('#cmbCustomers').on('change', () => {
-    const selectedOption = $('#cmbCustomers option:selected');
-
-    if (selectedOption.length > 0) {
-        const selectedCustomer = JSON.parse(selectedOption.val());
-        let name = selectedCustomer.name;
-        let contact = selectedCustomer.contact;
-
-        $('#customer_name').val(name);
-        $('#customer_contact').val(contact);
-
+function getLastCustomerId(customer_db) {
+    const lastIndex = customer_db.length - 1;
+    if (lastIndex >= 0) {
+        return customer_db[lastIndex].customer_id;
     } else {
-        console.log('No option selected');
+        return null; // Or you can return a default value or handle it differently
     }
-});
-$('#cmbItemId').on('click', () => {
-    item_db.forEach(item => {
-        // Check if an option with the same customer_id already exists
-        const isItemAdded = Array.from(document.getElementById('cmbItemId').options).some(option => {
-            const existingCustomer = JSON.parse(option.value);
-            return existingCustomer.item_id === item.item_id;
-        });
-
-        if (!isItemAdded) {
-            // If the customer with the same customer_id doesn't exist, add a new option
-            const option = document.createElement("option");
-            option.value = JSON.stringify(item);
-            option.text = item.item_id;
-            document.getElementById('cmbItemId').appendChild(option);
-        }
-    });
-});
-$('#cmbItemId').on('change', () => {
-    let item_id = $('#cmbItemId option:selected').text();
-
-    if (item_id) {
-
-        let foundItem = null;
-        let description = null;
-        let price = 0;
-        let qty = 0;
-
-
-        for (let i = 0; i < item_db.length; i++) {
-            if (item_db[i].item_id === item_id) {
-                foundItem = item_db[i];
-                console.log(foundItem)
-                description = foundItem.item_description;
-                price = foundItem.item_price;
-                qty = foundItem.qty;
-                break; // Exit the loop when the item is found
-            }
-        }
-
-
-        $('#item_desc').val(description);
-        $('#item_price').val(price);
-        $('#item_qty').val(qty);
-
-    } else {
-        console.log('No option selected');
-    }
-});
-
-$('#buy_qty').on('input', () => {
-
-    let val = $('#buy_qty').val();
-    let price = $('#item_price').val();
-
-    let total = val * price;
-
-    $('#total').val(total);
-
-
-})
-
-
-$('#add_cart').on('click', () => {
-
-    // Get the item_id you want to check
-    let item_id = $('#cmbItemId option:selected').text();
-
-// Check if the item_id already exists in the table body
-    let itemExists = false;
-
-    $('#order_table_body .item_id').each(function () {
-        if ($(this).text() === item_id) {
-            itemExists = true;
-            // Update the quantity for the existing item
-            let existingQty = parseInt($(this).closest('tr').find('.qty').text());
-            let qty = parseInt($('#buy_qty').val());
-            let newQty = existingQty + qty;
-
-
-            let existingTotal = parseInt($(this).closest('tr').find('.total').text());
-            let add_total = parseInt($('#total').val());
-            let newTotal = existingTotal + add_total;
-
-
-            let selectedItem = item_db.find(item => item.item_id === item_id);
-
-            if (selectedItem) {
-
-                if (selectedItem.qty < qty) {
-                    toastr.error('Error: Not enough items in stock.');
-                    return;
-                } else {
-                    // Update the item_db to reduce the quantity
-                    selectedItem.qty -= qty;
-                    let index = item_db.findIndex(item => item.item_id === item_id);
-
-                    // update item in the db
-                    let item_object = item_db[index]
-                    item_object.item_price -= qty;
-
-                    $(this).closest('tr').find('.qty').text(newQty);
-                    $(this).closest('tr').find('.total').text(newTotal);
-                    loadItemData();
-                }
-                // Check if quantity is non-negative
-
-            }
-
-            return false; // Break the loop if a match is found
-        }
-    });
-
-    if (!itemExists) {
-        console.log('Item with ID ' + item_id + ' is not in the table.');
-
-        let desc = $('#item_desc').val();
-        let total = $('#total').val();
-        let qty = $('#buy_qty').val();
-
-        // Find the item in item_db by its item_id
-        let selectedItem = item_db.find(item => item.item_id === item_id);
-
-        if (selectedItem) {
-
-            if (selectedItem.qty < qty) {
-                toastr.error('Error: Not enough items in stock.');
-                return;
-            } else {
-                // Update the item_db to reduce the quantity
-                selectedItem.qty -= parseInt(qty);
-                let index = item_db.findIndex(item => item.item_id === item_id);
-
-                // update item in the db
-                let item_object = item_db[index]
-                item_object.item_price -= parseInt(qty);
-
-                // other_js_file.js
-
-
-// Now you can call the loadItem function
-                loadItemData();
-
-            }
-            // Check if quantity is non-negative
-
-        }
-
-        // Add the item to the table
-        let record = `<tr><td class="item_id">${item_id}</td><td class="desc">${desc}</td><td class="total">${total}</td><td class="qty">${qty}</td></tr>`;
-        $("#order_table_body").append(record);
-
-
-        toastr.success("Add to cart...🛒");
-
-
-    } else {
-        console.log('Item not found in item_db.');
-
-    }
-
-
-    let final_total = 0;
-    for (let i = 0; i < $('#order_table_body tr').length; i++) {
-        // Get the current row
-        let row = $('#order_table_body tr').eq(i);
-        let total = parseFloat(row.find('.total').text());
-        final_total += total;
-
-
-    }
-
-    $('#final_total').val(final_total);
-
-    const cmbItemId = document.getElementById('cmbItemId');
-
-    cmbItemId.innerHTML = '';
-    $('#item_desc').val('');
-    $('#item_price').val('');
-    $('#item_qty').val('');
-    $('#buy_qty').val('');
-    $('#total').val('');
-
-})
-
-
-$("#order_table_body").on("click", "tr", function () {
-    row_index = $(this).index();
-
-    $("#order_table_body tr").removeClass("table-danger")
-    $("#order_table_body tr").eq(row_index).addClass("table-danger");
-
-});
-
-$('#remove').on("click", () => {
-    var $row = $("#order_table_body tr").eq(row_index);
-
-
-    // Iterate through the cells in the row and get their values
-
-
-    Swal.fire({
-        title: 'Remove Item from Cart',
-        text: 'Are you sure you want to remove this item from your cart?',
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#3085d6',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'Yes, remove it'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            $("#order_table_body tr").eq(row_index).remove();
-            $row.find(".total").each(function () {
-                var cell_value = parseFloat($(this).text()); // Assuming the value is a number
-                let final_total = $('#final_total').val();
-                console.log(cell_value)
-                final_total -= cell_value;
-                $('#final_total').val(final_total);
-
-            });
-
-            /*$row.find(".item_id").each(function () {
-
-                var item_id = $(this).text(); // Assuming the value is a number
-
-
-                $row.find(".qty").each(function () {
-
-                    var qty = parseInt($(this).text()); // Assuming the value is a number
-                    console.log(row_index)
-
-                    for (let i = 0; i < item_db.length; i++) {
-
-                        if (item_db[i].item_id === item_id) {
-
-                            let itemModel = item_db[i];
-
-                            console.log(itemModel)
-                            /!*let price = itemModel.item_price.val();*!/
-
-
-                            return;
-                        }
-
-                    }
-
-
-
-                    loadItemData()
-
-                })
-            })*/
-
-
-            Swal.fire(
-                'Removed from Cart',
-                'The item has been successfully removed from your cart.',
-                'success'
-            );
-        }
-    });
-
-})
-
-$('#place_ord').on('click', () => {
-
-    let order_id = $('#order_id').text();
-    let customer_id = $('#cmbCustomers option:selected').text();
-    let total = $('#final_total').val();
-
-    let items = [];
-    let itemModel=null;
-    var now = new Date();
-
-// Get the local date in various formats
-    var date = now.toLocaleDateString(); // R
-
-
-
-    for (let i = 0; i < $('#order_table_body tr').length; i++) {
-
-        let row = $('#order_table_body tr').eq(i);
-        let item_id = row.find('.item_id').text();
-        let desc = row.find('.desc').text();
-        let qty = row.find('.qty').text();
-        let total = row.find('.total').text();
-
-        itemModel = new ItemModel(item_id, desc, total,qty);
-
-
-
-        items.push(itemModel);
-    }
-
-
-
-    let orderModel = new OrderModel(order_id, customer_id, total, items,date);
-    order_db.push(orderModel);
-    toastr.success('Order placed successfully...🎁')
-    loadOrderCards()
-
-    $('#order_table_body').empty();
-    $('#final_total').val('')
-
-    const newOrderID = generateOrderID();
-    $('#order_id').text(newOrderID);
-
-    console.log(order_db)
-});
-
-
-
-function findHighestOrderNumber() {
-    let highestOrderNumber = 0;
-
-    for (const order of order_db) {
-        const orderNumber = parseInt(order.order_id.slice(1), 10);
-        if (!isNaN(orderNumber) && orderNumber > highestOrderNumber) {
-            highestOrderNumber = orderNumber;
-        }
-    }
-
-    return highestOrderNumber;
 }
 
-// Function to generate the next order ID
-function generateOrderID() {
-    const lastOrderNumber = findHighestOrderNumber();
-    const nextOrderNumber = lastOrderNumber + 1;
+// Example usage:
 
-    // Format the order number with leading zeros and "O" prefix
-    const orderID = 'O' + nextOrderNumber.toString().padStart(3, '0');
+const lastCustomerId = getLastCustomerId(customer_db);
 
-    return orderID;
+if (lastCustomerId !== null) {
+    console.log("Last Customer ID:", lastCustomerId);
+} else {
+    console.log("The array is empty. There are no customer IDs.");
 }
 
 
-$('#btn_recent_orders').on('click', () => {
+// date pick
+const loadDate = () => {
 
-    event.preventDefault();
-    $('.order_details').css('display', 'block');
-    $('.home_main').css('display', 'none');
-    $('#customer').css('display', 'none');
-    $('#order').css('display', 'none');
-    $('#item').css('display', 'none');
-})
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1;
+    let dd = today.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const nowDate = yyyy + '-' + mm + '-' + dd;
+
+    console.log(nowDate);
+    document.getElementById("datePicker").defaultValue = nowDate;
+
+
+    // var now = new Date();
+    //
+    // var day = ("0" + now.getDate()).slice(-2);
+    // var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    //
+    // var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+    //
+    // $('#datePicker').val(today);
+
+}
+
+
+// load customers
+export const loadCustomers = () => {
+
+    getLastCustomerId(customer_db);
+    loadDate();
+
+    $("#customer").empty();
+    customer_db.map((customer) => {
+        $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
+    });
+};
+
+// load customers for order customer text field
+$("#customer").on('change' , ()=> {
+    let customerId = $("#customer").val();
+
+    // Find the customer in the customer_db array based on customer_id
+    let customer = customer_db.find(customer => customer.customer_id === customerId);
+
+    console.log("customer is: ", customer);
+
+    // Find the index of the customer in the customer_db array
+    let cusRowIndex = customer_db.findIndex(customer => customer.customer_id === customerId);
+
+    console.log("customer index is: ", cusRowIndex);
+
+    let customer_id = customer_db[cusRowIndex].customer_id;
+    let customer_name = customer_db[cusRowIndex].customer_name;
+    let customer_address = customer_db[cusRowIndex].customer_address;
+    let customer_mobile = customer_db[cusRowIndex].customer_mobile;
+
+    console.log("01 customer id is: ", customerId);
+    console.log("02 customer name is: ", customer_name);
+    console.log("03 customer address is: ", customer_address);
+    console.log("04 customer mobile is: ", customer_mobile);
+
+    // $('#customer_id').val(customer_id);
+    $('#order_customer_name').val(customer_name);
+    $('#order_customer_address').val(customer_address);
+    $('#order_customer_mobile').val(customer_mobile);
+
+});
 
 
 
 
+// load items
+export const loadItems = () => {
+
+    console.log("loadItems");
+
+    $("#item").empty();
+    items_db.map((item) => {
+        $("#item").append(`<option value="${item.items_id}">${item.items_id}</option>`);
+    });
+};
+
+//load customers for order customer text field
+$("#item").on('change', () => {
+    let itemsId = $("#item").val();
+
+    // Find the items in the items_db array based on items_id
+    let items = items_db.find(item => item.items_id === itemsId);
+
+    console.log("items is: ", items);
+
+    // Check if the item exists in the items_db array
+    if (items) {
+        // If it exists, find the index
+        let itmRowIndex = items_db.findIndex(item => item.items_id === itemsId);
+
+        console.log("items index is: ", itmRowIndex);
+
+        //Access properties of the selected item
+        let items_id = items.items_id;
+        let order_items_name = items.items_name;
+        let order_items_qty = items.items_qty;
+        let order_items_price = items.items_price;
+
+        console.log("01 items_id is: ", items_id);
+        console.log("02 items name is: ", order_items_name);
+        console.log("03 items qty is: ", order_items_qty);
+        console.log("04 items price is: ", order_items_price);
+
+        // $('#items_id').val(items_id);
+        $('#order_items_name').val(order_items_name);
+        $('#store_items_qty').val(order_items_qty);
+        $('#order_items_price').val(order_items_price);
+
+        // Now, you can use these properties as needed
+    } else {
+        toastr.error("Item not found in Data Base");
+    }
+});
+
+
+// customer place order
+// $('#add_items').eq(0).on('click', () => {
+//
+//     console.log("Hello ADD Items");
+//
+//         let order_qty = $("#order_qty").val();
+//         console.log("Order qty is: ", order_qty);
+//
+//         let order_items_price = $("#order_items_price").val();
+//         console.log("Order items price is: ", order_items_price);
+//
+//         some();
+//         reduce();
+//         subTotal();
+//
+// });
+//
+//
+// //items some
+// const some = () =>{
+//
+//     let order_qty = $("#order_qty").val();
+//     let order_items_price =$("#order_items_price").val();
+//
+//     let some = order_qty * order_items_price;
+//     $("#total_label>#total_mount").text(some);
+//
+//     return some;
+//     console.log("*** Total is : ", some);
+// };
+//
+// //items reduce
+// const reduce = () => {
+//
+//     let order_qty = $("#order_qty").val();
+//     let store_qty =$("#store_items_qty").val();
+//
+//   let reduce = store_qty - order_qty ;
+//     $('#store_items_qty').val(reduce);
+//
+// }
+//
+// const subTotal = () => {
+//     let total = some(some);
+//     let discount =$("#discount").val();
+//
+//     console.log("DISCOUNT IS ; ",discount );
+//
+//     let subTotal = some - (some(discount/100));
+//
+//     $("#sub_total").text(subTotal);
+//
+//
+//
+// };
+
+
+// Handle "Add Items" button click
+$('#add_items').eq(0).on('click', () => {
+    // Get order_id and validate it
+    const order_id = parseFloat($("#order_id").val());
+
+    if (isNaN(order_id)) {
+        toastr.error("Order ID is null or empty.");
+        return; // Don't proceed if order_id is not valid
+    }
+
+    // Continue with processing order items
+    let order_items_id = parseFloat($("#item").val());
+    let order_qty = parseFloat($("#order_qty").val());
+    let order_items_name = $("#order_items_name").val(); // Assuming it's a string, not a number
+    let order_items_price = parseFloat($("#order_items_price").val());
+    let store_items_qty = parseFloat($("#store_items_qty").val());
+
+    // Validate order_qty and order_items_price
+    if (isNaN(order_qty) || isNaN(order_items_price)) {
+        toastr.error("Invalid input for order quantity or price.");
+        return;
+    }
+
+    // Check if store_items_qty is available
+    if (store_items_qty === 0) {
+        toastr.error("This Item is out of Stock.");
+        return;
+    }
+
+     if (store_items_qty < order_qty) {
+            toastr.error("This Item Cunt not in Stock .");
+            return;
+     }
+
+    // Check if order_qty is greater than 0
+    if (order_qty === 0) {
+        toastr.error("Please Input the Order Count of This Item.");
+        return;
+    }
+
+    // Proceed with calculations and updates
+    let total = some(order_qty, order_items_price);
+    reduce(order_qty);
+    dataLabel(total);
+
+    // Create an order instance and push it into orders_db
+    let order = new OrdersModel(order_items_id, order_items_name, order_qty, order_items_price, total);
+    orders_db.push(order);
+
+    // Log the updated orders_db
+    console.log("///////////////////////////////// ");
+    console.log("ORDERS IS ", orders_db);
+
+    loadOrders();
+});
+
+// load order table
+const loadOrders = () => {
+
+    console.log("ORDERS IS ", orders_db);
+
+
+    $('#order-tbl-body').empty();
+
+    orders_db.map((item, index) => {
+        let tbl_row = `<tr>
+                        <td class="order_itrms_id">${item.items_id}</td>
+                        <td class="order_itrms_name">${item.items_name}</td>
+                        <td class="order_itrms_qty">${item.order_qty}</td>
+                        <td class="order_itrms_price">${item.items_price}</td>
+                        <td class="order_itrms_total">${item.order_total}</td>
+                        </tr>`;
+        $('#order-tbl-body').append(tbl_row);
+    });
+
+};
+
+
+
+
+// Calculate total price of items
+const some = (order_qty, order_items_price) => {
+    let total = order_qty * order_items_price;
+    console.log("*** Total is: ", total);
+    return total;
+};
+
+// Reduce store quantity
+const reduce = (order_qty) => {
+    let store_qty = parseFloat($("#store_items_qty").val());
+
+    if (isNaN(store_qty) || isNaN(order_qty)) {
+        console.log("Invalid input for store quantity or order quantity.");
+        return;
+    }
+
+    let reducedQty = store_qty - order_qty;
+    $('#store_items_qty').val(reducedQty);
+}
+
+// Set total for label
+let runningTotal = 0;
+const dataLabel = (total) => {
+    runningTotal += total;
+    $("#total_mount").text(runningTotal);
+    $("#sub_total_label #sub_total").text(runningTotal);
+    // Update the subtotal with the new total
+    subTotal(runningTotal);
+}
+
+// Calculate subtotal with discount
+const subTotal = (total) => {
+    let discount = parseFloat($("#discount").val());
+    let cash = parseFloat($("#cash").val());
+
+    if (isNaN(discount)) {
+        console.log("Invalid discount input.");
+        return;
+    }
+
+    let discountedAmount = total * (discount / 100);
+    let subTotal = total - discountedAmount;
+    let change = cash - subTotal;
+
+    // Update the sub-total label
+    $("#sub_total_label #sub_total").text(subTotal);
+    $("#balance").val(change);
+}
+
+// Click event for the "Purchase" button
+$('#purchase').on('click', () => {
+    console.log("hello purchase button");
+    // Calculate the sub-total again to ensure it's up to date
+    subTotal(runningTotal);
+});

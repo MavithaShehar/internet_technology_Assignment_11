@@ -83,80 +83,6 @@ label{
 }
 
 
-/*orders*/
-
-* {
-    position: relative;
-}
-#dashboard, #customer, #item, #order {
-    font-weight: 600;
-    color: #1f1f1f;
-}
-
-#search {
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 40px;
-    width: 50%;
-}
-
-.form-label{
-    font-weight: bold;
-}
-
-#id, #name, #address, #salary, #price, #qty {
-    border: 1px solid black;
-}
-
-.buttons button {
-    width: 28%;
-}
-
-
-#customer_lab{
-    display: block;
-}
-#customer-id{
-    width: 250px;
-    display:inline-block;
-}
-.form-control{
-    width: 250px;
-}
-
-
-#item_lab{
-    display: block;
-}
-#item-id{
-    width: 250px;
-    display:inline-block;
-}
-#item_btn{
-    display: flex;
-    justify-content: center;
-}
-#qty_area{
-    background-color: #e3fc76;
-    height: 130px;
-    padding-left: 10px;
-}
-
-.order_section{
-    background-color: papayawhip;
-    border-radius: 10px;
-    border: 2px solid pink;
-    padding: 10px;
-}
-
-.cash_section{
-    margin-top: 5px;
-    background-color: greenyellow;
-    border-radius: 10px;
-    border: 2px solid pink;
-    padding: 10px;
-}
-
 /*dash bord*/
 
 .card {
@@ -187,9 +113,17 @@ label{
     color: black;
 }
 
-.chart {
-    width: 85%;
-    height: 80%;
+#customer_id {
+    color: red;
+    font-size: 18px;
+    font-weight: 500;
 }
 
+#customer_name,
+#customer_address,
+#customer_mobile{
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+}
 

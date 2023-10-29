@@ -46,7 +46,7 @@
         <div class="row">
 
             <!--customer form-->
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 ">
                 <form class="tbl_form">
 
                     <h2 class="topic">Customer Management Page</h2>
@@ -195,14 +195,16 @@
                         <h4 class="topic">Order</h4>
                         <div class="row">
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
-                                <label for="o_id" class="form-label">Order Id</label>
-                                <input type="text" class="form-control" id="o_id"
+                                <label for="order_id" class="form-label">Order Id</label>
+                                <input type="text" class="form-control" id="order_id"
                                        placeholder="">
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
-                                <label for="date" class="form-label">Customer Id</label>
-                                <input type="date" class="form-control" id="date"
-                                       placeholder="">
+                                <label for="datePicker" class="form-label">Oder Date</label>
+<!--                                <input type="date" class="form-control" id="date"-->
+<!--                                       placeholder="">-->
+                                <input id="datePicker" type="date">
+
                             </div>
                         </div>
 
@@ -252,29 +254,29 @@
                             </select>
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="i_name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="i_name"
+                            <label for="order_items_name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="order_items_name"
                                    placeholder="">
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="i_price" class="form-label">Price</label>
-                            <input type="text" class="form-control" id="i_price"
+                            <label for="order_items_price" class="form-label">Price</label>
+                            <input type="text" class="form-control" id="order_items_price"
                                    placeholder="">
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="i_qty_on_hand" class="form-label">Qty On Hand</label>
-                            <input type="text" class="form-control" id="i_qty_on_hand"
+                            <label for="store_items_qty" class="form-label">Qty</label>
+                            <input type="text" class="form-control" id="store_items_qty"
                                    placeholder="">
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="i_qty" class="form-label">Qty</label>
-                            <input type="text" class="form-control" id="i_qty"
+                            <label for="order_qty" class="form-label">Order Qty</label>
+                            <input type="text" class="form-control" id="order_qty"
                                    placeholder="">
                         </div>
 
-                        <button type="button"
+                        <button id="add_items" type="button"
                                 class="col col-4 col-sm4 col-md-4 col-lg-4 col-xl-4 col-xxl-6 btn btn-primary add_item_btn">
-                            Add new
+                            Add Items
                         </button>
                     </div>
 
@@ -284,9 +286,15 @@
             <!--            total   -->
             <div class="col col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                 <div class="balance_card">
-                    <h4 class="col col-10">Total : 0/=</h4>
-                    <h4 class="col col-10">Sub Total : 0/=</h4>
-                    <div class="row">
+                   <div id="total_label">
+                       <h4  class="col col-10 total">Total : </h4>
+                       <h4 id="total_mount" class="col col-10 total">00.0</h4>
+                   </div>
+                    <div id="sub_total_label">
+                        <h4  class="col col-10 mt-2 sub_total">Sub Total :</h4>
+                        <h4 id="sub_total" class="col col-10 mt-2 sub_total">00.0</h4>
+                    </div>
+                    <div class="row mt-2">
                         <div class="col col-5 col-sm-5 col-md-5 col-lg-8 col-xl-8 col-xxl-8 mb-3">
                             <label for="cash" class="form-label">Cash</label>
                             <input type="text" class="form-control" id="cash"
@@ -302,7 +310,7 @@
                             <input type="text" class="form-control" id="balance"
                                    placeholder="">
                         </div>
-                        <button type="button"
+                        <button type="button" id="purchase"
                                 class="col col-4 col-sm4 col-md-4 col-lg-4 col-xl-4 col-xxl-4 btn btn-primary purchase_btn">
                             Purchase
                         </button>
@@ -319,10 +327,11 @@
             <div class="col table_card">
                 <table class="table table-bordered">
                     <thead>
-                    <th>Code</th>
+                    <th>Items ID</th>
                     <th>Name</th>
+                    <th>Order Qty</th>
                     <th>Price</th>
-                    <th>Qty</th>
+                    <th>Total</th>
                     </thead>
 
                     <tbody id="order-tbl-body"></tbody>
@@ -362,15 +371,18 @@
             </div>
         </div>
 
-
-
-
     </div>
 </div>
 
 
 
-<script src="assets/lib/jquery.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!--<script src="assets/lib/jquery.min.js"></script>-->
+
+
 <script src="assets/lib/bootstrap/js/bootstrap.min.js"></script>
 <script type="module" src="controller/customerController.js"></script>
 <script type="module" src="controller/itemController.js"></script>
@@ -382,6 +394,5 @@
 <script>
 
    </script>
-
 </body>
 </html>
