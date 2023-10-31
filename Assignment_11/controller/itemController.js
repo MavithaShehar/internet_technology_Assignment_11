@@ -1,5 +1,7 @@
 import { ItemModel } from "../model/itemModel.js";
-import { items_db } from "../db/db.js";
+import {customer_db, items_db} from "../db/db.js";
+import {OrdersModel} from "../model/ordersModel.js";
+import {orders_db} from "../db/db.js"
 
 // Clean inputs
 const cleanInputs = () => {
@@ -8,6 +10,23 @@ const cleanInputs = () => {
     $('#items_qty').val('');
     $('#items_price').val('');
 };
+
+// generate Items ID
+function generateItemsId() {
+    if (items_db.length === 0) {
+        $("#items_id").val("I001");
+        return;
+    }
+    let lastId = items_db[items_db.length - 1].items_id;
+    lastId = lastId.substring(1);
+
+    let newId = Number.parseInt(lastId) + 1 + "";
+    newId = newId.padStart(3, "0");
+
+    $("#items_id").val("I" + newId);
+}
+
+
 
 // Load items
 const loadItems = () => {
@@ -24,6 +43,7 @@ const loadItems = () => {
     });
 };
 
+generateItemsId();
 // Add item
 $('#items-btns>button').eq(0).on('click', () => {
     let items_id = $('#items_id').val();
@@ -31,11 +51,50 @@ $('#items-btns>button').eq(0).on('click', () => {
     let items_qty = $('#items_qty').val();
     let items_price = $('#items_price').val();
 
+
+    if (items_id){
+        $("#items_id").css("border", "");
+
+    if(items_name){
+
+    if (items_qty){
+
+    if (items_price) {
+
+        Swal.fire(
+            'Success!',
+            'Customer has been saved successfully!',
+            'success'
+        );
+
+    }else {
+        toastr.error('Please Enter Items Price');
+        return;
+    }
+
+    }else {
+        toastr.error('Please Enter Items quantity');
+        return;
+    }
+
+    }else {
+        toastr.error('Please Enter Items Name');
+        return;
+    }
+
+    }else {
+        $("#items_id").css("border", "1px solid red");
+        toastr.error('Invalid Customer Item Id');
+        return;
+    }
+
+
     let items = new ItemModel(items_id, items_name, items_qty, items_price);
     items_db.push(items);
 
     cleanInputs();
     loadItems();
+    generateItemsId();
 });
 
 // Update item
@@ -95,6 +154,7 @@ $('#items-btns>button').eq(2).on('click', () => {
             }
         }
     });
+
 });
 
 // Fill item

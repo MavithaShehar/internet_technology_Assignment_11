@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>IJSE POS</title>
 
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <link rel="stylesheet" href="assets/style/customer.css">
     <link rel="stylesheet" href="assets/style/items.css">
     <link rel="stylesheet" href="assets/style/orders.css">
@@ -53,7 +55,9 @@
 
                     <div class="form-group mt-3">
                         <label for="customer_id">Customer Id</label>
-                        <input type="number" class="form-control" id="customer_id" placeholder="Enter customer id">
+                        <input type="text" class="form-control" id="customer_id" placeholder="Enter customer id">
+<!--                        <select class="form-select" aria-label="Default select example" id="customer_id">-->
+<!--                        </select>-->
                     </div>
 
                     <div class="form-group mt-3">
@@ -125,7 +129,7 @@
 
                     <div class="form-group mt-3">
                         <label for="items_id">Item Id</label>
-                        <input type="number" class="form-control" id="items_id" placeholder="Enter item id">
+                        <input type="text" class="form-control" id="items_id" placeholder="Enter item id">
                     </div>
 
                     <div class="form-group mt-3">
@@ -196,14 +200,15 @@
                         <div class="row">
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
                                 <label for="order_id" class="form-label">Order Id</label>
-                                <input type="text" class="form-control" id="order_id"
+                                <input type="text" class="form-control d-block" id="order_id"
                                        placeholder="">
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 ">
                                 <label for="datePicker" class="form-label">Oder Date</label>
 <!--                                <input type="date" class="form-control" id="date"-->
 <!--                                       placeholder="">-->
-                                <input id="datePicker" type="date">
+<!--                                 -->
+                                <input type="text" class="form-control black-border-1" id="datePicker" disabled>
 
                             </div>
                         </div>
@@ -232,7 +237,7 @@
                                        placeholder="">
                             </div>
                             <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                                <label for="order_customer_mobile" class="form-label">salary</label>
+                                <label for="order_customer_mobile" class="form-label">Customer mobile</label>
                                 <input type="number" class="form-control" id="order_customer_mobile"
                                        placeholder="">
                             </div>
@@ -249,8 +254,8 @@
                     <h4 class="topic">Item</h4>
                     <div class="row">
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
-                            <label for="item">Item</label>
-                            <select class="form-select" aria-label="Default select example" id="item">
+                            <label for="items">Item</label>
+                            <select class="form-select" aria-label="Default select example" id="items">
                             </select>
                         </div>
                         <div class="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-6 mb-3">
@@ -332,6 +337,7 @@
                     <th>Order Qty</th>
                     <th>Price</th>
                     <th>Total</th>
+                    <th>Selection</th>
                     </thead>
 
                     <tbody id="order-tbl-body"></tbody>
@@ -352,8 +358,8 @@
         <div class="col col-lg-6 col-md-6 col-sm-12 col-12 card mb-5">
             <div class="card_body">
                 <h1 class="card_label mb-2">Today Total Amount</h1>
-                <h2 class="card_label mb-2">LKR :</h2>
-                <h2>1000.00</h2>
+                <h2 class="card_label mb-2" >LKR :</h2>
+                <h2 >000.00</h2>
             </div>
         </div>
 
@@ -367,7 +373,7 @@
         <div class="col col-lg-6 col-md-6 col-sm-12 col-12 card mb-5">
             <div class="card_body">
                 <h1 class="card_label mb-2">Register customer</h1>
-                <h2 class="card_label mb-2">500</h2>
+                <h2 class="card_label mb-2" id="customers_count">000</h2>
             </div>
         </div>
 

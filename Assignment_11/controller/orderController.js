@@ -2,6 +2,7 @@ import {OrdersModel} from "../model/ordersModel.js"
 import {customer_db} from "../db/db.js";
 import {items_db} from "../db/db.js";
 import {orders_db} from "../db/db.js"
+import {ItemModel} from "../model/itemModel.js";
 
 
 function getLastCustomerId(customer_db) {
@@ -52,6 +53,22 @@ const loadDate = () => {
 
 }
 
+// generate oder ID
+function generateOderId() {
+    if (orders_db.length === 0) {
+        $("#order_id").val("O001");
+        return;
+    }
+    let lastId = orders_db[orders_db.length - 1].order_id;
+    lastId = lastId.substring(1);
+
+    let newId = Number.parseInt(lastId) + 1 + "";
+    newId = newId.padStart(3, "0");
+
+    $("#order_id").val("O" + newId);
+}
+
+
 
 // load customers
 export const loadCustomers = () => {
@@ -97,25 +114,21 @@ $("#customer").on('change' , ()=> {
 });
 
 
-
-
 // load items
 export const loadItems = () => {
 
-    console.log("loadItems");
-
-    $("#item").empty();
-    items_db.map((item) => {
-        $("#item").append(`<option value="${item.items_id}">${item.items_id}</option>`);
+    $("#items").empty();
+    items_db.map((items) => {
+        $("#items").append(`<option value="${items.items_id}">${items.items_id}</option>`);
     });
 };
 
 //load customers for order customer text field
-$("#item").on('change', () => {
-    let itemsId = $("#item").val();
+$("#items").on('change', () => {
+    let itemsId = $("#items").val();
 
     // Find the items in the items_db array based on items_id
-    let items = items_db.find(item => item.items_id === itemsId);
+    let items = items_db.find(items => items.items_id === itemsId);
 
     console.log("items is: ", items);
 
@@ -208,23 +221,30 @@ $("#item").on('change', () => {
 
 // Handle "Add Items" button click
 $('#add_items').eq(0).on('click', () => {
-    // Get order_id and validate it
-    const order_id = parseFloat($("#order_id").val());
 
-    if (isNaN(order_id)) {
+    const order_id = parseFloat($("#order_id").val());
+    const customer = parseFloat($("#customer").val());
+    const item = parseFloat($("#item").val());
+
+    if (isNaN(order_id))  {
         toastr.error("Order ID is null or empty.");
-        return; // Don't proceed if order_id is not valid
+        $("#order_id").css("border", "2px solid red");
+        return;
+    }else {
+        $("#order_id").css("border", "");
     }
 
+
     // Continue with processing order items
-    let order_items_id = parseFloat($("#item").val());
+    let order_items_id =  $('#items').val();
     let order_qty = parseFloat($("#order_qty").val());
     let order_items_name = $("#order_items_name").val(); // Assuming it's a string, not a number
     let order_items_price = parseFloat($("#order_items_price").val());
     let store_items_qty = parseFloat($("#store_items_qty").val());
 
+
     // Validate order_qty and order_items_price
-    if (isNaN(order_qty) || isNaN(order_items_price)) {
+    if (isNaN(order_qty) ) {
         toastr.error("Invalid input for order quantity or price.");
         return;
     }
@@ -255,12 +275,49 @@ $('#add_items').eq(0).on('click', () => {
     let order = new OrdersModel(order_items_id, order_items_name, order_qty, order_items_price, total);
     orders_db.push(order);
 
-    // Log the updated orders_db
-    console.log("///////////////////////////////// ");
-    console.log("ORDERS IS ", orders_db);
+    $('#order_qty').val('');
 
     loadOrders();
+
+    updateTbl(order_items_id);
+
 });
+
+const updateTbl = (order_items_id) => {
+
+    let items = order_items_id;
+
+    let order_items_name = $('#order_items_name').val();
+    let order_items_price = $('#order_items_price').val();
+    let store_items_qty = $('#store_items_qty').val();
+
+    let items_obj = new ItemModel(items, order_items_name, store_items_qty, order_items_price);
+
+    // find item index
+    let index = items_db.findIndex(item => item.items_id === items);
+
+        // update item in the db
+        items_db[index] = items_obj;
+
+    newloadItems();
+
+}
+
+// Load new items table lode
+const newloadItems = () => {
+    $('#items-tbl-body').empty();
+
+    items_db.map((item, index) => {
+        let tbl_row = `<tr>
+                        <td class="items_id">${item.items_id}</td>
+                        <td class="items_name">${item.items_name}</td>
+                        <td class="items_qty">${item.items_qty}</td>
+                        <td class="items_price">${item.items_price}</td>
+                        </tr>`;
+        $('#items-tbl-body').append(tbl_row);
+    });
+};
+
 
 // load order table
 const loadOrders = () => {
@@ -277,12 +334,12 @@ const loadOrders = () => {
                         <td class="order_itrms_qty">${item.order_qty}</td>
                         <td class="order_itrms_price">${item.items_price}</td>
                         <td class="order_itrms_total">${item.order_total}</td>
+                         <td class="selection"><button type="button" class="btn btn-danger">Remove</button></i></td>
                         </tr>`;
         $('#order-tbl-body').append(tbl_row);
     });
 
 };
-
 
 
 
@@ -340,4 +397,31 @@ $('#purchase').on('click', () => {
     console.log("hello purchase button");
     // Calculate the sub-total again to ensure it's up to date
     subTotal(runningTotal);
+});
+
+// delete
+$('#order-tbl-body').on('click', '.selection button', function () {
+
+    console.log("click Remove button")
+
+    const orderID = $(this).closest('tr').find('.order_itrms_id').text();
+
+    const indexToRemove = orders_db.findIndex(item => item.items_id === orderID);
+    if (indexToRemove !== -1) {
+        orders_db.splice(indexToRemove, 1);
+
+        loadOrders();
+    }
+});
+
+
+// search orders
+$('#order_id').on('input', () => {
+    let search_term = $('#order_id').val();
+
+
+    let results = orders_db.filter((item) =>
+
+        item.items_name.toLowerCase().startsWith(search_term.toLowerCase()) || item.order_qty.toLowerCase().startsWith(search_term.toLowerCase()) || item.items_price.startsWith(search_term)|| item.order_total.startsWith(search_term)
+    )
 });

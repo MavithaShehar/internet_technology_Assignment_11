@@ -1,4 +1,4 @@
-import {customer_db} from '../db/db.js';
+import {customer_db, orders_db} from '../db/db.js';
 import {CustomerModel} from '../model/customerModel.js';
 
 const sriLankanMobileNumberRegex = /^(\+94|0)[1-9][0-9]{8}$/;
@@ -10,6 +10,22 @@ const cleanInputs = () => {
     $('#customer_address').val('');
     $('#customer_mobile').val('');
 };
+
+
+// generate oder ID
+function generateCustomerId() {
+    if (customer_db.length === 0) {
+        $("#customer_id").val("C001");
+        return;
+    }
+    let lastId = customer_db[customer_db.length - 1].customer_id;
+    lastId = lastId.substring(1);
+
+    let newId = Number.parseInt(lastId) + 1 + "";
+    newId = newId.padStart(3, "0");
+
+    $("#customer_id").val("C" + newId);
+}
 
 // load customers
 const loadCustomers = () => {
@@ -28,10 +44,12 @@ const loadCustomers = () => {
 
 };
 
+generateCustomerId();
+
 // Add customer
 $('#customer-btns>button').eq(0).on('click', () => {
 
-    console.log("hello customer")
+    console.log("hello customer");
 
     let customer_id = $('#customer_id').val();
     let customer_name = $('#customer_name').val();
@@ -76,7 +94,14 @@ $('#customer-btns>button').eq(0).on('click', () => {
         toastr.error('Invalid Customer Id');
     }
 
+    const customer_count = customer_db.length;
+    $('#customers_count').text(customer_count);
+
+    generateCustomerId();
+
 });
+
+
 
 // update
 $("#customer-btns>button").eq(1).on("click", () => {
@@ -185,6 +210,7 @@ $('#customer-search').on('input', () => {
     });
 
 });
+
 
 // let customer1 = new CustomerModel("C001" , "Shehar" , "Alpitiya" , "0758745308");
 // let customer2 = new CustomerModel("C002" , "Shehar" , "Alpitiya" , "0758745308");
