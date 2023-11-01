@@ -56,7 +56,7 @@ const loadDate = () => {
 // generate oder ID
 function generateOderId() {
     if (orders_db.length === 0) {
-        $("#order_id").val("O001");
+        $("#order_id").val("OD001");
         return;
     }
     let lastId = orders_db[orders_db.length - 1].order_id;
@@ -65,7 +65,7 @@ function generateOderId() {
     let newId = Number.parseInt(lastId) + 1 + "";
     newId = newId.padStart(3, "0");
 
-    $("#order_id").val("O" + newId);
+    $("#order_id").val("OD" + newId);
 }
 
 
@@ -78,7 +78,7 @@ export const loadCustomers = () => {
 
     $("#customer").empty();
     customer_db.map((customer) => {
-        $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
+         $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
     });
 };
 
@@ -226,6 +226,8 @@ $('#add_items').eq(0).on('click', () => {
     const customer = parseFloat($("#customer").val());
     const item = parseFloat($("#item").val());
 
+    $("#discount").val(0);
+
     if (isNaN(order_id))  {
         toastr.error("Order ID is null or empty.");
         $("#order_id").css("border", "2px solid red");
@@ -283,6 +285,15 @@ $('#add_items').eq(0).on('click', () => {
 
 });
 
+// calqulate balance
+$('#cash, #discount').on('input', () => {
+
+    subTotal();
+});
+
+
+
+//updateTbl items tabel
 const updateTbl = (order_items_id) => {
 
     let items = order_items_id;
@@ -350,7 +361,7 @@ const some = (order_qty, order_items_price) => {
     return total;
 };
 
-// Reduce store quantity
+// Reduce store items quantity
 const reduce = (order_qty) => {
     let store_qty = parseFloat($("#store_items_qty").val());
 
@@ -370,18 +381,13 @@ const dataLabel = (total) => {
     $("#total_mount").text(runningTotal);
     $("#sub_total_label #sub_total").text(runningTotal);
     // Update the subtotal with the new total
-    subTotal(runningTotal);
 }
 
 // Calculate subtotal with discount
-const subTotal = (total) => {
+const subTotal = () => {
     let discount = parseFloat($("#discount").val());
     let cash = parseFloat($("#cash").val());
-
-    if (isNaN(discount)) {
-        console.log("Invalid discount input.");
-        return;
-    }
+    let total = $('#total_mount').text();
 
     let discountedAmount = total * (discount / 100);
     let subTotal = total - discountedAmount;
@@ -394,9 +400,8 @@ const subTotal = (total) => {
 
 // Click event for the "Purchase" button
 $('#purchase').on('click', () => {
-    console.log("hello purchase button");
-    // Calculate the sub-total again to ensure it's up to date
-    subTotal(runningTotal);
+
+
 });
 
 // delete
