@@ -140,6 +140,7 @@ $('#items-btns>button').eq(1).on('click', () => {
         // Reload items
         loadItems();
     }
+    generateItemsId();
 });
 
 // Delete item

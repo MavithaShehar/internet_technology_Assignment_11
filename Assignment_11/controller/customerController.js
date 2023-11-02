@@ -143,6 +143,8 @@ $("#customer-btns>button").eq(1).on("click", () => {
 
     }
 
+    generateCustomerId();
+
 })
 
 // delete
