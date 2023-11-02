@@ -78,7 +78,7 @@ export const loadCustomers = () => {
 
     $("#customer").empty();
     customer_db.map((customer) => {
-         $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
+        $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
     });
 };
 
@@ -257,10 +257,10 @@ $('#add_items').eq(0).on('click', () => {
         return;
     }
 
-     if (store_items_qty < order_qty) {
-            toastr.error("This Item Cunt not in Stock .");
-            return;
-     }
+    if (store_items_qty < order_qty) {
+        toastr.error("This Item Cunt not in Stock .");
+        return;
+    }
 
     // Check if order_qty is greater than 0
     if (order_qty === 0) {
@@ -274,8 +274,8 @@ $('#add_items').eq(0).on('click', () => {
     dataLabel(total);
 
     // Create an order instance and push it into orders_db
-    let order = new OrdersModel(order_items_id, order_items_name, order_qty, order_items_price, total);
-    orders_db.push(order);
+    lodeDatabase(order_items_id, order_items_name, order_qty, order_items_price, total);
+
 
     $('#order_qty').val('');
 
@@ -291,7 +291,22 @@ $('#cash, #discount').on('input', () => {
     subTotal();
 });
 
+const lodeDatabase = (order_items_id, order_items_name, order_qty, order_items_price, total) => {
+    let index = orders_db.findIndex(item => item.items_id === order_items_id);
 
+    if (index !== -1) {
+        // Update an existing order if it exists
+        orders_db[index].items_qty = order_items_id;
+        orders_db[index].items_name = order_items_name;
+        orders_db[index].order_qty += order_qty;
+        orders_db[index].items_price = order_items_price;
+        orders_db[index].order_total += total;
+    } else {
+        // Create a new order if it doesn't exist
+        let order = new OrdersModel(order_items_id, order_items_name, order_qty, order_items_price, total);
+        orders_db.push(order);
+    }
+}
 
 //updateTbl items tabel
 const updateTbl = (order_items_id) => {
@@ -307,8 +322,8 @@ const updateTbl = (order_items_id) => {
     // find item index
     let index = items_db.findIndex(item => item.items_id === items);
 
-        // update item in the db
-        items_db[index] = items_obj;
+    // update item in the db
+    items_db[index] = items_obj;
 
     newloadItems();
 
@@ -406,19 +421,39 @@ $('#purchase').on('click', () => {
 
 // delete
 $('#order-tbl-body').on('click', '.selection button', function () {
-
+    console.log("click Remove button");
     console.log("click Remove button")
 
     const orderID = $(this).closest('tr').find('.order_itrms_id').text();
-
     const indexToRemove = orders_db.findIndex(item => item.items_id === orderID);
-    if (indexToRemove !== -1) {
+    const items_db_index = items_db.findIndex(item => item.items_id === orderID);
+
+    const order_qty = parseFloat(orders_db[indexToRemove].order_qty);
+    console.log("Order quantity is:", order_qty);
+
+    const order_total = parseFloat(orders_db[indexToRemove].order_total);
+    const old_total = $('#total_mount').text();
+    const sub_total_label = $('#sub_total_label').text();
+
+    console.log("Order quantity is:", order_total);
+
+    const stock_qty = parseFloat(items_db[items_db_index].items_qty);
+    console.log("Stock quantity is:", stock_qty);
+
+    const new_qty = stock_qty + order_qty;
+    console.log("New stock quantity is:", new_qty);
+
+    const new_total = old_total - order_total;
+    const new_sub_total = sub_total_label - old_total
+    $('#total_mount').text(new_total);
+    $("#sub_total_label #sub_total").text(new_total);
+    runningTotal -=new_total;
+
+    $('#store_items_qty').val(new_qty) ;
         orders_db.splice(indexToRemove, 1);
-
+        updateTbl(orderID);
         loadOrders();
-    }
 });
-
 
 // search orders
 $('#order_id').on('input', () => {
