@@ -51,13 +51,25 @@ $('#customer-btns>button').eq(0).on('click', () => {
 
     console.log("hello customer");
 
+
     let customer_id = $('#customer_id').val();
     let customer_name = $('#customer_name').val();
     let customer_address = $('#customer_address').val();
     let customer_mobile = $('#customer_mobile').val();
 
 
-    if(customer_id) {
+    if (customer_id) {
+        let index = customer_db.findIndex(item => item.customer_id === customer_id);
+
+        if (index !== -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Customer ID',
+                text: 'Please Check Customer ID Now !!',
+                footer: '<a href="">Why do I have this issue?</a>'
+            })
+            return;
+        }
 
         if(customer_name) {
 
