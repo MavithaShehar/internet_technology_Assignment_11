@@ -3,6 +3,15 @@ import {customer_db, items_db} from "../db/db.js";
 import {OrdersModel} from "../model/ordersModel.js";
 import {orders_db} from "../db/db.js"
 
+let item1 = new ItemModel("I001" , "aa" , 10 , 100);
+let item2 = new ItemModel("I002" , "bb" , 15 , 150);
+let item3 = new ItemModel("I003" , "cc" , 20 , 200);
+
+items_db.push(item1);
+items_db.push(item2);
+items_db.push(item3);
+
+
 // Clean inputs
 const cleanInputs = () => {
     $('#items_id').val('');
@@ -29,7 +38,7 @@ function generateItemsId() {
 
 
 // Load items
-const loadItems = () => {
+export const loadItems = () => {
     $('#items-tbl-body').empty();
 
     items_db.map((item, index) => {
@@ -54,6 +63,18 @@ $('#items-btns>button').eq(0).on('click', () => {
 
     if (items_id){
         $("#items_id").css("border", "");
+
+        let index = items_db.findIndex(item => item.items_id === items_id);
+
+        if (index !== -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Items ID',
+                text: 'Please Check Items ID Now !!',
+                footer: '<a href="">Why do I have this issue?</a>'
+            })
+            return;
+        }
 
     if(items_name){
 
