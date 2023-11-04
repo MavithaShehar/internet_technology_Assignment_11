@@ -226,16 +226,16 @@ $('#customer-search').on('input', () => {
 });
 
 
-// let customer1 = new CustomerModel("C001" , "Shehar" , "Alpitiya" , "0758745308");
-// let customer2 = new CustomerModel("C002" , "Shehar" , "Alpitiya" , "0758745308");
-// let customer3 = new CustomerModel("C003" , "Shehar" , "Alpitiya" , "0758745308");
-// let customer4 = new CustomerModel("C004" , "Shehar" , "Alpitiya" , "0758745308");
-// let customer5 = new CustomerModel("C005" , "Shehar" , "Alpitiya" , "0758745308");
-//
-// customer_db.push(customer1);
-// customer_db.push(customer2);
-// customer_db.push(customer3);
-// customer_db.push(customer4);
-// customer_db.push(customer5);
+let customer1 = new CustomerModel("C001" , "Shehar" , "Alpitiya" , "0758745308");
+let customer2 = new CustomerModel("C002" , "Shehar" , "Alpitiya" , "0758745308");
+let customer3 = new CustomerModel("C003" , "Shehar" , "Alpitiya" , "0758745308");
+let customer4 = new CustomerModel("C004" , "Shehar" , "Alpitiya" , "0758745308");
+let customer5 = new CustomerModel("C005" , "Shehar" , "Alpitiya" , "0758745308");
+
+customer_db.push(customer1);
+customer_db.push(customer2);
+customer_db.push(customer3);
+customer_db.push(customer4);
+customer_db.push(customer5);
 
 

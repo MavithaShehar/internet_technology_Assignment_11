@@ -2,7 +2,11 @@ import {OrdersModel} from "../model/ordersModel.js"
 import {customer_db} from "../db/db.js";
 import {items_db} from "../db/db.js";
 import {orders_db} from "../db/db.js"
+import {orders_history_db} from "../db/db.js"
 import {ItemModel} from "../model/itemModel.js";
+import {Orders_history_Model} from "../model/orders_historyModel.js"
+
+
 
 
 function getLastCustomerId(customer_db) {
@@ -40,16 +44,6 @@ const loadDate = () => {
 
     console.log(nowDate);
     document.getElementById("datePicker").defaultValue = nowDate;
-
-
-    // var now = new Date();
-    //
-    // var day = ("0" + now.getDate()).slice(-2);
-    // var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    //
-    // var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-    //
-    // $('#datePicker').val(today);
 
 }
 
@@ -89,22 +83,13 @@ $("#customer").on('change' , ()=> {
     // Find the customer in the customer_db array based on customer_id
     let customer = customer_db.find(customer => customer.customer_id === customerId);
 
-    console.log("customer is: ", customer);
-
     // Find the index of the customer in the customer_db array
     let cusRowIndex = customer_db.findIndex(customer => customer.customer_id === customerId);
-
-    console.log("customer index is: ", cusRowIndex);
 
     let customer_id = customer_db[cusRowIndex].customer_id;
     let customer_name = customer_db[cusRowIndex].customer_name;
     let customer_address = customer_db[cusRowIndex].customer_address;
     let customer_mobile = customer_db[cusRowIndex].customer_mobile;
-
-    console.log("01 customer id is: ", customerId);
-    console.log("02 customer name is: ", customer_name);
-    console.log("03 customer address is: ", customer_address);
-    console.log("04 customer mobile is: ", customer_mobile);
 
     // $('#customer_id').val(customer_id);
     $('#order_customer_name').val(customer_name);
@@ -130,25 +115,16 @@ $("#items").on('change', () => {
     // Find the items in the items_db array based on items_id
     let items = items_db.find(items => items.items_id === itemsId);
 
-    console.log("items is: ", items);
-
-    // Check if the item exists in the items_db array
+     // Check if the item exists in the items_db array
     if (items) {
         // If it exists, find the index
         let itmRowIndex = items_db.findIndex(item => item.items_id === itemsId);
-
-        console.log("items index is: ", itmRowIndex);
 
         //Access properties of the selected item
         let items_id = items.items_id;
         let order_items_name = items.items_name;
         let order_items_qty = items.items_qty;
         let order_items_price = items.items_price;
-
-        console.log("01 items_id is: ", items_id);
-        console.log("02 items name is: ", order_items_name);
-        console.log("03 items qty is: ", order_items_qty);
-        console.log("04 items price is: ", order_items_price);
 
         // $('#items_id').val(items_id);
         $('#order_items_name').val(order_items_name);
@@ -342,6 +318,8 @@ const newloadItems = () => {
                         </tr>`;
         $('#items-tbl-body').append(tbl_row);
     });
+
+
 };
 
 
@@ -360,7 +338,7 @@ const loadOrders = () => {
                         <td class="order_itrms_qty">${item.order_qty}</td>
                         <td class="order_itrms_price">${item.items_price}</td>
                         <td class="order_itrms_total">${item.order_total}</td>
-                         <td class="selection"><button type="button" class="btn btn-danger">Remove</button></i></td>
+                         <td class="selection"><button type="button" style="margin-left: 100px" class="btn btn-danger">X</button></i></td>
                         </tr>`;
         $('#order-tbl-body').append(tbl_row);
     });
@@ -414,10 +392,48 @@ const subTotal = () => {
 }
 
 // Click event for the "Purchase" button
+
+
+
 $('#purchase').on('click', () => {
-
-
+    lod_order_history();
 });
+
+const lod_order_history = () => {
+    let order_id = $('#order_id').val();
+    let customer_id = $('#customer').val();
+    let datePicker = $('#datePicker').val();
+    let discount = $('#discount').val();
+    let sub_total = $('#sub_total').text();
+
+
+
+       let order = new Orders_history_Model(
+        order_id,
+        datePicker,
+        customer_id,
+        orders_db,
+        discount,
+        sub_total
+    );
+
+    orders_history_db.push(order)
+    refrsh();
+};
+
+const refrsh = () => {
+
+    $('#order-tbl-body').empty();
+    orders_db.length=0;
+
+    $('#total_mount').text("0");
+    $('#sub_total').text("0");
+    $('#cash').val("");
+    $('#balance').val("");
+
+    runningTotal *=0;
+
+}
 
 // delete
 $('#order-tbl-body').on('click', '.selection button', function () {
@@ -429,19 +445,14 @@ $('#order-tbl-body').on('click', '.selection button', function () {
     const items_db_index = items_db.findIndex(item => item.items_id === orderID);
 
     const order_qty = parseFloat(orders_db[indexToRemove].order_qty);
-    console.log("Order quantity is:", order_qty);
 
     const order_total = parseFloat(orders_db[indexToRemove].order_total);
     const old_total = $('#total_mount').text();
     const sub_total_label = $('#sub_total_label').text();
 
-    console.log("Order quantity is:", order_total);
-
     const stock_qty = parseFloat(items_db[items_db_index].items_qty);
-    console.log("Stock quantity is:", stock_qty);
 
     const new_qty = stock_qty + order_qty;
-    console.log("New stock quantity is:", new_qty);
 
     const new_total = old_total - order_total;
     const new_sub_total = sub_total_label - old_total
