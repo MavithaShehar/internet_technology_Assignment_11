@@ -4,10 +4,7 @@ import {items_db} from "../db/db.js";
 import {orders_db} from "../db/db.js"
 import {orders_history_db} from "../db/db.js"
 import {ItemModel} from "../model/itemModel.js";
-import {Orders_history_Model} from "../model/orders_historyModel.js"
-
-
-
+import {Orders_history_Model} from "../model/Orders_history_Model .js"
 
 function getLastCustomerId(customer_db) {
     const lastIndex = customer_db.length - 1;
@@ -136,63 +133,6 @@ $("#items").on('change', () => {
         toastr.error("Item not found in Data Base");
     }
 });
-
-
-// customer place order
-// $('#add_items').eq(0).on('click', () => {
-//
-//     console.log("Hello ADD Items");
-//
-//         let order_qty = $("#order_qty").val();
-//         console.log("Order qty is: ", order_qty);
-//
-//         let order_items_price = $("#order_items_price").val();
-//         console.log("Order items price is: ", order_items_price);
-//
-//         some();
-//         reduce();
-//         subTotal();
-//
-// });
-//
-//
-// //items some
-// const some = () =>{
-//
-//     let order_qty = $("#order_qty").val();
-//     let order_items_price =$("#order_items_price").val();
-//
-//     let some = order_qty * order_items_price;
-//     $("#total_label>#total_mount").text(some);
-//
-//     return some;
-//     console.log("*** Total is : ", some);
-// };
-//
-// //items reduce
-// const reduce = () => {
-//
-//     let order_qty = $("#order_qty").val();
-//     let store_qty =$("#store_items_qty").val();
-//
-//   let reduce = store_qty - order_qty ;
-//     $('#store_items_qty').val(reduce);
-//
-// }
-//
-// const subTotal = () => {
-//     let total = some(some);
-//     let discount =$("#discount").val();
-//
-//     console.log("DISCOUNT IS ; ",discount );
-//
-//     let subTotal = some - (some(discount/100));
-//
-//     $("#sub_total").text(subTotal);
-//
-//
-//
-// };
 
 
 // Handle "Add Items" button click
@@ -399,6 +339,7 @@ $('#purchase').on('click', () => {
     lod_order_history();
 });
 
+
 const lod_order_history = () => {
     let order_id = $('#order_id').val();
     let customer_id = $('#customer').val();
@@ -406,34 +347,32 @@ const lod_order_history = () => {
     let discount = $('#discount').val();
     let sub_total = $('#sub_total').text();
 
+    let order_items = orders_db.slice(0,3);
 
-
-       let order = new Orders_history_Model(
+    let order = new Orders_history_Model(
         order_id,
         datePicker,
         customer_id,
-        orders_db,
+        order_items,
         discount,
         sub_total
     );
 
-    orders_history_db.push(order)
-    refrsh();
-};
+    orders_history_db.push(order);
 
-const refrsh = () => {
-
-    $('#order-tbl-body').empty();
-    orders_db.length=0;
-
+    // Reset values
+    runningTotal = 0;
     $('#total_mount').text("0");
     $('#sub_total').text("0");
     $('#cash').val("");
     $('#balance').val("");
+    $('#order-tbl-body').empty();
 
-    runningTotal *=0;
 
-}
+    orders_db.length = 0;
+
+};
+
 
 // delete
 $('#order-tbl-body').on('click', '.selection button', function () {
