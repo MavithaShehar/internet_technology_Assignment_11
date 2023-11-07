@@ -9,10 +9,10 @@ import {loadHistory} from "../controller/orderHistoryController.js";
 // import {Ord} from "../model/Orders_history_Model .js"
 
 
-
+$('#customer-section').css('display', 'none');
 $('#item-section').css('display', 'none');
 $('#order-section').css('display', 'none');
-$('#dashboard-section').css('display', 'none');
+$('#dashboard-section').css('display', 'block');
 $('#order-history-section').css('display', 'none');
 
 
@@ -64,5 +64,6 @@ $('#dash-nav').on('click', () => {
     $('#item-section').css('display', 'none');
     $('#order-section').css('display', 'none');
     $('#dashboard-section').css('display', 'block');
+    $('#order-history-section').css('display', 'none');
 });
 

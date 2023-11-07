@@ -362,14 +362,14 @@
             <div class="card_body">
                 <h1 class="card_label mb-2">Today Total Amount</h1>
                 <h2 class="card_label mb-2" >LKR :</h2>
-                <h2 >000.00</h2>
+                <h2 id="total-amount-pre-day">000.00</h2>
             </div>
         </div>
 
         <div class="col col-lg-6 col-md-6 col-sm-12 col-12 card mb-5">
             <div class="card_body">
                 <h1 class="card_label mb-2">Today Total Sales</h1>
-                <h2 class="card_label mb-2">100</h2>
+                <h2 id="sale_count" class="card_label mb-2">0</h2>
             </div>
         </div>
 
@@ -391,9 +391,14 @@
         <div class="row">
 
             <!--Item tbl-->
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-12 col-xxl-12" id="order-history-tbl">
 
-                <!--                <input type="text" class="form-control mb-3" id="items-search" placeholder="Search Item">-->
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8">
+
+                <input type="text" class="form-control mb-3" id="orders-search" placeholder="Search by orders"  style="width: 15vw; background: #6edff6 ">
+
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8" id="order-history-tbl">
 
                 <table class="table">
 
@@ -409,6 +414,28 @@
                     </thead>
 
                     <tbody id="order-history-tbl-body"></tbody>
+
+                </table>
+
+            </div>
+
+
+
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4" id="order-history-items-tbl">
+
+                <table class="table">
+
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ItemsID</th>
+                        <th scope="col">Items Name</th>
+                        <th scope="col">Items Price</th>
+                        <th scope="col">Order QTY</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="order-history-items-tbl-body"></tbody>
 
                 </table>
 

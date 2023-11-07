@@ -11,7 +11,7 @@ function getLastCustomerId(customer_db) {
     if (lastIndex >= 0) {
         return customer_db[lastIndex].customer_id;
     } else {
-        return null; // Or you can return a default value or handle it differently
+        return null;
     }
 }
 
@@ -41,6 +41,7 @@ const loadDate = () => {
 
     console.log(nowDate);
     document.getElementById("datePicker").defaultValue = nowDate;
+
 
 }
 
@@ -313,14 +314,15 @@ const dataLabel = (total) => {
     runningTotal += total;
     $("#total_mount").text(runningTotal);
     $("#sub_total_label #sub_total").text(runningTotal);
-    // Update the subtotal with the new total
+
+
 }
 
 // Calculate subtotal with discount
 const subTotal = () => {
     let discount = parseFloat($("#discount").val());
     let cash = parseFloat($("#cash").val());
-    let total = $('#total_mount').text();
+    let total = parseFloat($('#total_mount').text());
 
     let discountedAmount = total * (discount / 100);
     let subTotal = total - discountedAmount;
@@ -329,14 +331,56 @@ const subTotal = () => {
     // Update the sub-total label
     $("#sub_total_label #sub_total").text(subTotal);
     $("#balance").val(change);
+
+
 }
 
-// Click event for the "Purchase" button
 
 
+let total_amount_pre_day = 0;
+let sale_count =0
 
 $('#purchase').on('click', () => {
-    lod_order_history();
+
+    let order_id = $('#order_id').val();
+    let index = orders_history_db.findIndex(order => order.order_id === order_id);
+
+    let total_amount = $('#sub_total').text(); // Get the text content
+    total_amount = parseFloat(total_amount);
+    total_amount_pre_day = total_amount_pre_day+total_amount;
+    $('#total-amount-pre-day').text(total_amount_pre_day);
+
+
+    if (index !== -1) {
+        Swal.fire({
+            icon: 'error',
+            title: 'This Order ID is Already Exists',
+            text: 'Please Check Orders ID Now !!',
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+
+            lod_order_history();
+            sale_count ++;
+            $("#sale_count").text(sale_count);
+
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+    });
+
+
 });
 
 
@@ -397,7 +441,9 @@ $('#order-tbl-body').on('click', '.selection button', function () {
     const new_sub_total = sub_total_label - old_total
     $('#total_mount').text(new_total);
     $("#sub_total_label #sub_total").text(new_total);
+
     runningTotal -=new_total;
+    total_amount_pre_day -=new_total;
 
     $('#store_items_qty').val(new_qty) ;
         orders_db.splice(indexToRemove, 1);
