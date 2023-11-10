@@ -47,17 +47,17 @@ const loadDate = () => {
 
 // generate oder ID
 function generateOderId() {
-    if (orders_db.length === 0) {
-        $("#order_id").val("OD001");
+    if (orders_history_db.length === 0) {
+        $("#order_id").val("O001");
         return;
     }
-    let lastId = orders_db[orders_db.length - 1].order_id;
+    let lastId = orders_history_db[orders_history_db.length - 1].order_id;
     lastId = lastId.substring(1);
 
     let newId = Number.parseInt(lastId) + 1 + "";
     newId = newId.padStart(3, "0");
 
-    $("#order_id").val("OD" + newId);
+    $("#order_id").val("O" + newId);
 }
 
 
@@ -69,10 +69,13 @@ export const loadCustomers = () => {
     loadDate();
 
     $("#customer").empty();
+    $("#customer").append(`<option selected hidden>Select Customer</option>`);
     customer_db.map((customer) => {
         $("#customer").append(`<option value="${customer.customer_id}">${customer.customer_id}</option>`);
     });
 };
+
+generateOderId();
 
 // load customers for order customer text field
 $("#customer").on('change' , ()=> {
@@ -101,6 +104,7 @@ $("#customer").on('change' , ()=> {
 export const loadItems = () => {
 
     $("#items").empty();
+    $("#items").append(`<option selected hidden>Select Item</option>`);
     items_db.map((items) => {
         $("#items").append(`<option value="${items.items_id}">${items.items_id}</option>`);
     });
@@ -139,13 +143,13 @@ $("#items").on('change', () => {
 // Handle "Add Items" button click
 $('#add_items').eq(0).on('click', () => {
 
-    const order_id = parseFloat($("#order_id").val());
-    const customer = parseFloat($("#customer").val());
-    const item = parseFloat($("#item").val());
+    const order_id =$("#order_id").val();
+
+    let index = orders_history_db.findIndex(item => item.order_id === order_id);
 
     $("#discount").val(0);
 
-    if (isNaN(order_id))  {
+    if (index !== -1)  {
         toastr.error("Order ID is null or empty.");
         $("#order_id").css("border", "2px solid red");
         return;
@@ -374,6 +378,7 @@ $('#purchase').on('click', () => {
             lod_order_history();
             sale_count ++;
             $("#sale_count").text(sale_count);
+            generateOderId();
 
         } else if (result.isDenied) {
             Swal.fire("Changes are not saved", "", "info");
@@ -391,7 +396,7 @@ const lod_order_history = () => {
     let discount = $('#discount').val();
     let sub_total = $('#sub_total').text();
 
-    let order_items = orders_db.slice(0,3);
+    let order_items = orders_db.slice();
 
     let order = new Orders_history_Model(
         order_id,

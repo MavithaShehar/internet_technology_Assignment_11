@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="assets/style/customer.css">
     <link rel="stylesheet" href="assets/style/items.css">
     <link rel="stylesheet" href="assets/style/orders.css">
+    <link rel="stylesheet" href="assets/style/style.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="assets/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -18,31 +20,60 @@
 
 <!--header-->
 
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#" id="nav_topic">
-        <img src="assets/img/lemon-solid-48.png" alt="">S_M_K FOOD </a>
-    <div  id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" id="dash-nav">Dashboard</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="customer-nav">Customers</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="item-nav">Items</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="order-nav">Order</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" id="order-history-nav">History</a>
-            </li>
+<!--<nav class="navbar navbar-expand-lg bg-body-tertiary">-->
+<!--    <a class="navbar-brand" href="#" id="nav_topic">-->
+<!--        <img src="assets/img/lemon-solid-48.png" alt="">S_M_K FOOD </a>-->
+<!--    <div  id="navbarNav">-->
+<!--        <ul class="navbar-nav">-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" id="dash-nav">Dashboard</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" id="customer-nav">Customers</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" id="item-nav">Items</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" id="order-nav">Order</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" id="order-history-nav">History</a>-->
+<!--            </li>-->
 
-        </ul>
+<!--        </ul>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<header>
+    <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a id="nav_topic" class="navbar-brand" href="#"><img src="assets/img/lemon-solid-48.png" alt="">S_M_K FOOD </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul id="menu-list" class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" id="dash-nav">Dashboard</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="customer-nav">Customers</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="item-nav">Items</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="order-nav">Order</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" id="order-history-nav">History</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
-
+</header>
 
 <!--customer section-->
 <section id="customer-section" class="mt-3">
