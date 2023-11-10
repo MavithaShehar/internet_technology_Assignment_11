@@ -3,13 +3,13 @@ import {customer_db, items_db} from "../db/db.js";
 import {OrdersModel} from "../model/ordersModel.js";
 import {orders_db} from "../db/db.js"
 
-let item1 = new ItemModel("I001" , "aa" , 10 , 100);
-let item2 = new ItemModel("I002" , "bb" , 15 , 150);
-let item3 = new ItemModel("I003" , "cc" , 20 , 200);
-
-items_db.push(item1);
-items_db.push(item2);
-items_db.push(item3);
+// let item1 = new ItemModel("I001" , "aa" , 10 , 100);
+// let item2 = new ItemModel("I002" , "bb" , 15 , 150);
+// let item3 = new ItemModel("I003" , "cc" , 20 , 200);
+//
+// items_db.push(item1);
+// items_db.push(item2);
+// items_db.push(item3);
 
 
 // Clean inputs
